@@ -116,15 +116,14 @@ export const useLocalStore = create<LocalStore>((set) => ({
 
 export interface TweetStore {
   header: string;
-  answers: string;
-  update: (newState: { header: string; answers: string }) => void;
+  stats: string;
+  update: (newState: { header: string; stats: string }) => void;
 }
 
 export const useTweetStore = create<TweetStore>((set) => ({
   header: "",
-  answers: "$⬜⬜⬜.⬜⬜",
-  update: (newState: { header: string; answers: string }) =>
-    set(() => newState),
+  stats: "",
+  update: (newState: { header: string; stats: string }) => set(() => newState),
 }));
 
 function saveState(state: GameState) {

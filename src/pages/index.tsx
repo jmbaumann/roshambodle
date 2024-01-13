@@ -44,6 +44,11 @@ export default function Home() {
       setPlayerLocked(true);
       setCountdown(4);
     }
+
+    setTweet({
+      header: `🪨📄✂️ roshambodle #1 `,
+      stats: `Stats: ${store.stats.wins}-${store.stats.losses}-${store.stats.draws}     Streak: ${store.stats.streak}`,
+    });
   }, []);
 
   useEffect(() => {
@@ -82,6 +87,12 @@ export default function Home() {
         (gameResult === "win" ? "W" : gameResult === "lose" ? "L" : "D") +
         String(newStreakNum);
       const isOnStreak = gameResult === "win";
+      const wins =
+        gameResult === "win" ? store.stats.wins + 1 : store.stats.wins;
+      const losses =
+        gameResult === "lose" ? store.stats.losses + 1 : store.stats.losses;
+      const draws =
+        gameResult === "draw" ? store.stats.draws + 1 : store.stats.draws;
 
       updateStore({
         ...store,
@@ -95,11 +106,9 @@ export default function Home() {
         },
         stats: {
           gamesPlayed: store.stats.gamesPlayed + 1,
-          wins: gameResult === "win" ? store.stats.wins + 1 : store.stats.wins,
-          losses:
-            gameResult === "lose" ? store.stats.losses + 1 : store.stats.losses,
-          draws:
-            gameResult === "draw" ? store.stats.draws + 1 : store.stats.draws,
+          wins,
+          losses,
+          draws,
           streak,
           isOnStreak,
           winStreak:
@@ -109,12 +118,10 @@ export default function Home() {
         },
       });
 
-      // setTweet({
-      //   header: `pricel #${game.dayOffset + 1} ${
-      //     over ? (!won && guesses.length === 6 ? "X" : guesses.length) : "?"
-      //   }/6`,
-      //   answers: getTwitterSquares(correct),
-      // });
+      setTweet({
+        header: `🪨📄✂️ roshambodle #1 `,
+        stats: `Stats: ${wins}-${losses}-${draws}     Streak: ${streak}`,
+      });
     }
   }, [gameResult]);
 
@@ -122,7 +129,7 @@ export default function Home() {
     <>
       <SEO />
 
-      <main className="font-tektur flex h-screen max-h-screen flex-col items-center bg-gradient-to-b from-[#2d2d2d] to-[#222222]">
+      <main className="flex h-screen max-h-screen flex-col items-center bg-gradient-to-b from-[#2d2d2d] to-[#222222] font-tektur">
         <TopBar
           openSettings={openSettings}
           setOpenSettings={setOpenSettings}
@@ -175,18 +182,20 @@ export default function Home() {
 
           {!playerLocked && (
             <div className="absolute bottom-10 flex w-full flex-col">
-              {playerChoice !== undefined && (
+              {playerChoice !== undefined ? (
                 <Button
                   className="mx-auto mb-10 bg-green-400 text-2xl text-white"
                   onClick={() => setPlayerLocked(true)}
                 >
                   <Lock size={24} className="mr-2 h-4 w-4" /> Lock In
                 </Button>
+              ) : (
+                <p className="mb-2 text-white">Make a choice</p>
               )}
-              <div className="flex justify-around text-6xl">
+              <div className="flex justify-around text-6xl lg:mx-auto lg:min-w-[800px] lg:max-w-[70%]">
                 <div
                   className={cn(
-                    "rounded-lg border-4 border-white p-4",
+                    "rounded-lg border-4 border-white p-4 hover:cursor-pointer",
                     playerChoice === "rock" ? "border-green-400" : "",
                     `transition-transform ${playerChoice === "rock" ? "translate-y-[-20px]" : ""}`,
                   )}
@@ -196,7 +205,7 @@ export default function Home() {
                 </div>
                 <div
                   className={cn(
-                    "rounded-lg border-4 border-white p-4",
+                    "rounded-lg border-4 border-white p-4 hover:cursor-pointer",
                     playerChoice === "paper" ? "border-green-400" : "",
                     `transition-transform ${playerChoice === "paper" ? "translate-y-[-20px]" : ""}`,
                   )}
@@ -206,7 +215,7 @@ export default function Home() {
                 </div>
                 <div
                   className={cn(
-                    "rounded-lg border-4 border-white p-4",
+                    "rounded-lg border-4 border-white p-4 hover:cursor-pointer",
                     playerChoice === "scissors" ? "border-green-400" : "",
                     `transition-transform ${playerChoice === "scissors" ? "translate-y-[-20px]" : ""}`,
                   )}

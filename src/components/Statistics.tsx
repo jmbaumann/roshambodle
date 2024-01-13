@@ -77,7 +77,7 @@ export default function Statistics({
                   size="icon"
                   onClick={() => {
                     void navigator.clipboard.writeText(
-                      tweet.header + "\n" + tweet.answers,
+                      tweet.header + "\n" + tweet.stats,
                     );
                     toast({ title: "Results copied to clipboard" });
                   }}
@@ -87,7 +87,7 @@ export default function Statistics({
                 <div className="mx-2">
                   <TwitterShareButton
                     url={""}
-                    title={tweet.header + "\n" + tweet.answers}
+                    title={tweet.header + "\n" + tweet.stats}
                   >
                     <TwitterIcon size={48} round />
                   </TwitterShareButton>
