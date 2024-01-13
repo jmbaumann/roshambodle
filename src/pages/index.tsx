@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { HelpCircle, Lock } from "lucide-react";
-import { format } from "date-fns";
+import { format, differenceInCalendarDays } from "date-fns";
 import SEO from "@/components/SEO";
 import Countdown from "@/components/Countdown";
 import Statistics from "@/components/Statistics";
@@ -46,7 +46,7 @@ export default function Home() {
     }
 
     setTweet({
-      header: `🪨📄✂️ roshambodle #1 `,
+      header: `🪨📄✂️ roshambodle #${differenceInCalendarDays(new Date(), new Date("2024-01-13"))}`,
       stats: `Stats: ${store.stats.wins}-${store.stats.losses}-${store.stats.draws}     Streak: ${store.stats.streak}`,
     });
   }, []);

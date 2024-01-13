@@ -126,6 +126,12 @@ export const useTweetStore = create<TweetStore>((set) => ({
 }));
 
 function saveState(state: GameState) {
+  const ls = localStorage.getItem(LOCAL_STOREAGE_KEY);
+  if (ls) {
+    const gs = JSON.parse(ls) as GameState;
+    if (gs.stats.gamesPlayed > 0 && state.stats.gamesPlayed === 0) return;
+  }
+
   localStorage.setItem(
     LOCAL_STOREAGE_KEY,
     JSON.stringify({ ...state, timestamp: new Date().getTime() }),
