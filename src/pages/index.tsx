@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import { HelpCircle, Lock } from "lucide-react";
+import { differenceInCalendarDays, format } from "date-fns";
 import SEO from "@/components/SEO";
 import TopBar from "@/components/TopBar";
 import Countdown from "@/components/Countdown";
@@ -24,8 +25,26 @@ export default function Home() {
 
   const store = useLocalStore();
   const updateStore = useLocalStore((state) => state.update);
-  const reload = useLocalStore((state) => state.reload);
   const setTweet = useTweetStore((state) => state.update);
+
+  useEffect(() => {
+    if (!store.game) store.newGame();
+    else if (
+      format(new Date(store.game.timestamps.lastCompleted), "yyyy-MM-dd") !==
+      format(new Date(), "yyyy-MM-dd")
+    ) {
+      store.newGame();
+      setOpponentChoice(undefined);
+      setPlayerChoice(undefined);
+      setPlayerLocked(false);
+      setCountdown(undefined);
+    } else {
+      setOpponentChoice(getRandomChoice(new Date()));
+      setPlayerChoice(store.game.choice);
+      setPlayerLocked(true);
+      setCountdown(4);
+    }
+  }, []);
 
   useEffect(() => {
     if (playerLocked && (countdown ? countdown < 4 : true)) {
@@ -46,7 +65,11 @@ export default function Home() {
   }, [playerLocked, countdown, playerChoice]);
 
   useEffect(() => {
-    if (gameResult !== undefined) {
+    if (
+      gameResult !== undefined &&
+      format(new Date(store.game.timestamps.lastPlayed), "yyyy-MM-dd") !==
+        format(new Date(), "yyyy-MM-dd")
+    ) {
       const oldStreakRes = store.stats.streak.substring(0, 1);
       const oldStreakNum = Number(store.stats.streak.substring(1));
       const newStreakNum =
@@ -99,7 +122,7 @@ export default function Home() {
     <>
       <SEO />
 
-      <main className="flex h-screen max-h-screen flex-col items-center bg-gradient-to-b from-[#2d2d2d] to-[#222222]">
+      <main className="font-tektur flex h-screen max-h-screen flex-col items-center bg-gradient-to-b from-[#2d2d2d] to-[#222222]">
         <TopBar
           openSettings={openSettings}
           setOpenSettings={setOpenSettings}

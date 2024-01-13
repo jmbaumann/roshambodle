@@ -15,6 +15,9 @@ module.exports = {
         "2xl": "1400px",
       },
     },
+    fontFamily: {
+      tektur: ["Tektur", "sans-serif"],
+    },
     extend: {
       height: {
         screen: ["100vh /* fallback for Opera, IE and etc. */", "100dvh"],
