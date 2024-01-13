@@ -11,6 +11,7 @@ import {
 import { Button } from "./ui/button";
 import { toast } from "./ui/use-toast";
 import { useLocalStore, useTweetStore } from "@/utils/store";
+import { cn } from "@/lib/utils";
 
 export default function Statistics({
   open,
@@ -19,8 +20,8 @@ export default function Statistics({
   open: boolean;
   setOpen: React.Dispatch<React.SetStateAction<boolean>>;
 }) {
-  // const stats = useLocalStore((state) => state.stats);
-  // const tweet = useTweetStore();
+  const stats = useLocalStore((state) => state.stats);
+  const tweet = useTweetStore();
 
   return (
     <Sheet open={open} onOpenChange={setOpen}>
@@ -34,7 +35,7 @@ export default function Statistics({
         <SheetHeader>
           <SheetTitle className="text-center text-white">Statistics</SheetTitle>
           <SheetDescription className="text-white">
-            {/* <div className="mb-8 flex flex-row justify-evenly">
+            <div className="mb-8 flex flex-row justify-evenly">
               <div className="w-[64px]">
                 <div className="text-center text-xl font-semibold">
                   {stats.gamesPlayed}
@@ -43,40 +44,28 @@ export default function Statistics({
               </div>
               <div className="w-[64px]">
                 <div className="text-center text-xl font-semibold">
-                  {stats.gamesWon}
+                  {stats.wins}-{stats.losses}-{stats.draws}
                 </div>
-                <div className="text-center text-xs">Won</div>
+                <div className="text-center text-xs">Record</div>
+              </div>
+              <div className="w-[64px]">
+                <div
+                  className={cn(
+                    "text-center text-xl font-semibold",
+                    stats.streak.startsWith("W") ? "text-green-400" : "",
+                    stats.streak.startsWith("L") ? "text-red-600" : "",
+                  )}
+                >
+                  {stats.streak}
+                </div>
+                <div className="text-center text-xs">Streak</div>
               </div>
               <div className="w-[64px]">
                 <div className="text-center text-xl font-semibold">
-                  {stats.gamesPlayed > 0
-                    ? Math.round((stats.gamesWon / stats.gamesPlayed) * 100)
-                    : 0}
-                  %
+                  {stats.winStreak}
                 </div>
-                <div className="text-center text-xs">Win %</div>
+                <div className="text-center text-xs">Best Win Streak</div>
               </div>
-              <div className="w-[64px]">
-                <div className="text-center text-xl font-semibold">
-                  {stats.currentStreak}
-                </div>
-                <div className="text-center text-xs">Current Streak</div>
-              </div>
-              <div className="w-[64px]">
-                <div className="text-center text-xl font-semibold">
-                  {stats.maxStreak}
-                </div>
-                <div className="text-center text-xs">Max Streak</div>
-              </div>
-            </div>
-            <div className="mt-4 flex flex-col">
-              <div className="text-md mb-1 text-center">Guess History</div>
-              <GuessBar num={1} total={stats.guesses[1]} />
-              <GuessBar num={2} total={stats.guesses[2]} />
-              <GuessBar num={3} total={stats.guesses[3]} />
-              <GuessBar num={4} total={stats.guesses[4]} />
-              <GuessBar num={5} total={stats.guesses[5]} />
-              <GuessBar num={6} total={stats.guesses[6]} />
             </div>
 
             <div className="mt-4 flex flex-col items-center">
@@ -103,8 +92,8 @@ export default function Statistics({
                     <TwitterIcon size={48} round />
                   </TwitterShareButton>
                 </div>
-              </div> 
-            </div>*/}
+              </div>
+            </div>
           </SheetDescription>
         </SheetHeader>
       </SheetContent>

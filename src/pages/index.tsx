@@ -3,8 +3,10 @@ import Link from "next/link";
 import { HelpCircle, Lock } from "lucide-react";
 import SEO from "@/components/SEO";
 import TopBar from "@/components/TopBar";
+import Countdown from "@/components/Countdown";
 import { Button } from "@/components/ui/button";
 import { getRandomChoice, determineWinner } from "@/utils";
+import { useLocalStore, useTweetStore } from "@/utils/store";
 import { cn } from "@/lib/utils";
 
 type Choice = "rock" | "paper" | "scissors";
@@ -19,6 +21,11 @@ export default function Home() {
 
   const [openSettings, setOpenSettings] = useState(false);
   const [openStatistics, setOpenStatistics] = useState(false);
+
+  const store = useLocalStore();
+  const updateStore = useLocalStore((state) => state.update);
+  const reload = useLocalStore((state) => state.reload);
+  const setTweet = useTweetStore((state) => state.update);
 
   useEffect(() => {
     if (playerLocked && (countdown ? countdown < 4 : true)) {
@@ -37,6 +44,56 @@ export default function Home() {
       }, 1800);
     }
   }, [playerLocked, countdown, playerChoice]);
+
+  useEffect(() => {
+    if (gameResult !== undefined) {
+      const oldStreakRes = store.stats.streak.substring(0, 1);
+      const oldStreakNum = Number(store.stats.streak.substring(1));
+      const newStreakNum =
+        (oldStreakRes === "W" && gameResult === "win") ||
+        (oldStreakRes === "L" && gameResult === "lose") ||
+        (oldStreakRes === "D" && gameResult === "draw")
+          ? oldStreakNum + 1
+          : 1;
+      const streak =
+        (gameResult === "win" ? "W" : gameResult === "lose" ? "L" : "D") +
+        String(newStreakNum);
+      const isOnStreak = gameResult === "win";
+
+      updateStore({
+        ...store,
+        game: {
+          choice: playerChoice,
+          gameOver: true,
+          timestamps: {
+            lastCompleted: new Date().getTime(),
+            lastPlayed: new Date().getTime(),
+          },
+        },
+        stats: {
+          gamesPlayed: store.stats.gamesPlayed + 1,
+          wins: gameResult === "win" ? store.stats.wins + 1 : store.stats.wins,
+          losses:
+            gameResult === "lose" ? store.stats.losses + 1 : store.stats.losses,
+          draws:
+            gameResult === "draw" ? store.stats.draws + 1 : store.stats.draws,
+          streak,
+          isOnStreak,
+          winStreak:
+            gameResult === "win" && newStreakNum > store.stats.winStreak
+              ? newStreakNum
+              : store.stats.winStreak,
+        },
+      });
+
+      // setTweet({
+      //   header: `pricel #${game.dayOffset + 1} ${
+      //     over ? (!won && guesses.length === 6 ? "X" : guesses.length) : "?"
+      //   }/6`,
+      //   answers: getTwitterSquares(correct),
+      // });
+    }
+  }, [gameResult]);
 
   return (
     <>
@@ -90,6 +147,8 @@ export default function Home() {
               {playerChoice === "scissors" && <span>✂️</span>}
             </div>
           )}
+
+          {gameResult !== undefined && <Countdown />}
 
           {!playerLocked && (
             <div className="absolute bottom-10 flex w-full flex-col">

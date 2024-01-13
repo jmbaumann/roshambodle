@@ -42,46 +42,7 @@ export default function Settings({
           <SheetDescription className="text-white">
             <div className="flex flex-col">
               <div className="mt-2 text-lg font-semibold">How To Play</div>
-              <div className="mb-2 text-sm">
-                Guess the price of the item in 6 tries or less
-              </div>
-              <div className="mb-2 text-sm">
-                The color of the tiles will change to show how close your guess
-                was to the price
-              </div>
-              <div className="mb-2 text-sm">
-                The arrow to the right of your guess tells you if the actual
-                price is higher or lower
-              </div>
-              <div className="mb-2 text-sm">
-                The price used is the one-time purchase list price of the
-                product at the time it was added to the pool of products and
-                does not account for any sales, deals, or price changes in the
-                time since
-              </div>
-              <div className="mb-2 text-sm">
-                Blatant ripoff of{" "}
-                <a
-                  href="https://www.nytimes.com/games/wordle/index.html"
-                  target="_blank"
-                  className="underline"
-                >
-                  Wordle
-                </a>
-              </div>
-
-              <div className="mt-6 text-lg font-semibold">Settings</div>
-              {/* <div className="mx-auto flex items-center space-x-2">
-                <Switch
-                  className="data-[state=checked]:bg-green-600"
-                  id="show-higher-lower"
-                  checked={store.settings.showArrow}
-                  onCheckedChange={handleShowArrow}
-                />
-                <Label htmlFor="show-higher-lower">
-                  Show Higher / Lower Arrow
-                </Label>
-              </div> */}
+              <div className="mb-2 text-sm">It&apos;s Rock Paper Scissors</div>
 
               {/* <div className="mt-6 text-lg font-semibold">More Games</div>
               <div className="mb-2 text-sm">

@@ -3,77 +3,52 @@ import { differenceInCalendarDays } from "date-fns";
 
 export interface GameState {
   game: {
-    guesses: string[];
+    choice: "rock" | "paper" | "scissors" | undefined;
     gameOver: boolean;
-    status: "IN_PROGRESS" | "COMPLETE";
-    dayOffset: number;
     timestamps: {
       lastCompleted: number;
       lastPlayed: number;
     };
   };
   stats: {
-    currentStreak: number;
     gamesPlayed: number;
-    gamesWon: number;
+    wins: number;
+    losses: number;
+    draws: number;
+    streak: string;
     isOnStreak: boolean;
-    maxStreak: number;
-    guesses: {
-      1: number;
-      2: number;
-      3: number;
-      4: number;
-      5: number;
-      6: number;
-      fail: number;
-    };
-  };
-  settings: {
-    showArrow: boolean;
+    winStreak: number;
   };
   timestamp: number;
 }
 
 interface LocalStore extends GameState {
   update: (newState: GameState) => void;
-  addGuess: (guess: string) => void;
   newGame: () => void;
   reload: () => void;
   reset: () => void;
   resetToday: () => void;
 }
 
-const LOCAL_STOREAGE_KEY = "pricel";
+const LOCAL_STOREAGE_KEY = "rps-daily";
 
 const defaultState = {
   game: {
-    guesses: [],
+    choice: undefined,
     gameOver: false,
-    status: "IN_PROGRESS",
-    dayOffset: 0,
     timestamps: {
       lastCompleted: 0,
       lastPlayed: 0,
     },
   },
   stats: {
-    currentStreak: 0,
     gamesPlayed: 0,
-    gamesWon: 0,
+    wins: 0,
+    losses: 0,
+    draws: 0,
+    streak: "",
     isOnStreak: false,
-    maxStreak: 0,
-    guesses: {
-      1: 0,
-      2: 0,
-      3: 0,
-      4: 0,
-      5: 0,
-      6: 0,
-      fail: 0,
-    },
-  },
-  settings: {
-    showArrow: true,
+    winStreak: 0,
   },
   timestamp: new Date().getTime(),
 } as GameState;
@@ -94,24 +69,6 @@ export const useLocalStore = create<LocalStore>((set) => ({
       saveState(newState);
       return newState;
     }),
-  addGuess: (guess: string) =>
-    set((state) => {
-      let newState = { ...state };
-      if (!state.game.guesses.includes(guess))
-        newState = {
-          ...state,
-          game: {
-            ...state.game,
-            guesses: [...state.game.guesses, guess],
-            timestamps: {
-              ...state.game.timestamps,
-              lastPlayed: new Date().getTime(),
-            },
-          },
-        };
-      saveState(newState);
-      return newState;
-    }),
   newGame: () =>
     set((state) => {
       let newGameState = { ...state };
@@ -119,14 +76,8 @@ export const useLocalStore = create<LocalStore>((set) => ({
         ...state,
         game: {
           ...state.game,
-          guesses: [],
-          higher: "NONE",
+          choice: undefined,
           gameOver: false,
-          status: "IN_PROGRESS",
-          dayOffset: differenceInCalendarDays(
-            new Date(),
-            new Date("2023-10-12T00:00:00"),
-          ),
         },
       };
       saveState(newGameState);
@@ -150,9 +101,8 @@ export const useLocalStore = create<LocalStore>((set) => ({
         ...state,
         game: {
           ...state.game,
-          guesses: [],
-          status: "COMPLETE",
-          dayOffset: 0,
+          choice: undefined,
+          gameOver: false,
           timestamps: {
             lastCompleted: yesterdayTS,
             lastPlayed: yesterdayTS,
