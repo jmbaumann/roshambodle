@@ -7,8 +7,6 @@ import {
 } from "@/components/ui/sheet";
 import { Info } from "lucide-react";
 // import Consensu5Logo from "./Consensu5";
-// import { Switch } from "./ui/switch";
-// import { Label } from "./ui/label";
 // import { useLocalStore } from "@/utils/store";
 
 export default function Settings({
@@ -19,19 +17,10 @@ export default function Settings({
   setOpen: React.Dispatch<React.SetStateAction<boolean>>;
 }) {
   // const store = useLocalStore();
-  // const updateStore = useLocalStore((state) => state.update);
-
-  // const handleShowArrow = (show: boolean) => {
-  //   updateStore({
-  //     ...store,
-  //     settings: { showArrow: show },
-  //   });
-  // };
 
   return (
     <Sheet open={open} onOpenChange={setOpen}>
       <SheetTrigger className="px-2 py-2 text-white">
-        {/* <Gear size={24} /> */}
         <Info size={24} />
       </SheetTrigger>
       <SheetContent

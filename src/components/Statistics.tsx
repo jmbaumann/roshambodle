@@ -100,23 +100,3 @@ export default function Statistics({
     </Sheet>
   );
 }
-
-// const GuessBar: React.FC<{ num: number; total: number }> = ({ num, total }) => {
-//   const stats = useLocalStore((state) => state.stats);
-//   const most = Math.max(
-//     ...Object.keys(stats.guesses).map(
-//       (e) => stats.guesses[e as keyof typeof stats.guesses],
-//     ),
-//   );
-//   const width = { width: total ? `${(total / most) * 100}%` : "16px" };
-//   return (
-//     <div className="flex items-center">
-//       <p className="mx-2 inline tabular-nums">{num}</p>
-//       <div className="flex h-4 items-center bg-white" style={width}>
-//         <p className="ml-auto mr-1 inline tabular-nums text-[#131921]">
-//           {total}
-//         </p>
-//       </div>
-//     </div>
-//   );
-// };

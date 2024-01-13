@@ -1,9 +1,9 @@
 import { useEffect, useState } from "react";
 import { format } from "date-fns";
-// import { useLocalStore } from "@/utils/store";
+import { useLocalStore } from "@/utils/store";
 
 export default function Countdown() {
-  // const store = useLocalStore();
+  const store = useLocalStore();
   const [timer, setTimer] = useState("");
 
   const updateTimer = () => {
@@ -31,10 +31,10 @@ export default function Countdown() {
     return () => clearInterval(interval);
   }, []);
 
-  const refreshReady = false;
-  // store.game.timestamps.lastPlayed &&
-  // format(new Date(store.game.timestamps.lastPlayed), "yyyy-MM-dd") !==
-  //   format(new Date(), "yyyy-MM-dd");
+  const refreshReady =
+    store.game.timestamps.lastPlayed &&
+    format(new Date(store.game.timestamps.lastPlayed), "yyyy-MM-dd") !==
+      format(new Date(), "yyyy-MM-dd");
 
   return (
     <div className="mt-6 flex flex-row items-center justify-center text-2xl text-white">

@@ -1,10 +1,10 @@
 import { useEffect, useState } from "react";
-import Link from "next/link";
 import { HelpCircle, Lock } from "lucide-react";
-import { differenceInCalendarDays, format } from "date-fns";
+import { format } from "date-fns";
 import SEO from "@/components/SEO";
-import TopBar from "@/components/TopBar";
 import Countdown from "@/components/Countdown";
+import Statistics from "@/components/Statistics";
+import Settings from "@/components/Settings";
 import { Button } from "@/components/ui/button";
 import { getRandomChoice, determineWinner } from "@/utils";
 import { useLocalStore, useTweetStore } from "@/utils/store";
@@ -130,12 +130,16 @@ export default function Home() {
       <SEO />
 
       <main className="flex h-screen max-h-screen flex-col items-center bg-gradient-to-b from-[#2d2d2d] to-[#222222] font-tektur">
-        <TopBar
-          openSettings={openSettings}
-          setOpenSettings={setOpenSettings}
-          openStatistics={openStatistics}
-          setOpenStatistics={setOpenStatistics}
-        />
+        <div className="mb-1 flex w-full flex-row items-center bg-[#2d2d2d] p-2">
+          <div className="font-amazon mx-auto my-2 text-3xl text-white">
+            🪨 📄 ✂️
+          </div>
+          <div className="absolute right-3">
+            <Statistics open={openStatistics} setOpen={setOpenStatistics} />
+            <Settings open={openSettings} setOpen={setOpenSettings} />
+          </div>
+        </div>
+
         <div className="w-full items-center text-center">
           {!opponentChoice ? (
             <div

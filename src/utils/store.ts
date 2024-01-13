@@ -1,5 +1,4 @@
 import { create } from "zustand";
-import { differenceInCalendarDays } from "date-fns";
 
 export interface GameState {
   game: {
